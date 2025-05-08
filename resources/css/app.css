@@ -1,0 +1,32 @@
+@import 'tailwindcss';
+
+@plugin 'tailwindcss-animate';
+@source '../views';
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+
+@font-face {
+    font-family: "IRANSasnWeb";
+    src: url("../fonts/IRANSansWeb_Light.ttf");
+}
+
+@theme {
+    --font-iransans: "IRANSasnWeb", serif;
+}
+
+/* ================================= Custom normal CSS classes */
+::-webkit-scrollbar {
+    width: 0;
+}
+
+/* ================================= Custom tailwind CSS classes */
+@layer base {
+    * {
+        direction: rtl;
+    }
+}
+
+@layer components {
+    .container {
+        @apply md:w-full md:ml-auto md:mr-auto md:pl-[2rem] md:pr-[2rem]
+    }
+}
