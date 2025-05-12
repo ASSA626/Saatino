@@ -31,13 +31,16 @@ class Clock extends Model
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
+     * Get the attributes that should be cast.
      *
-     * @var list<string>
+     * @return array<string, string>
      */
-    protected $casts = [
-        'created_date' => 'date',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'created_date' => 'date',
+        ];
+    }
 
     /**
      * Comment

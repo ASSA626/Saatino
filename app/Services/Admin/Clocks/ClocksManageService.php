@@ -83,22 +83,24 @@ class ClocksManageService extends Service
         });
     }
 
-    public function reportClock(int $userId, ?string $startDate = null, ?string $endDate = null): array
+    public function reportClock(int $userId, ?array $filters = []): array
     {
-        if (!$startDate || !$endDate) {
+        if (!empty($filters['start_date'])) {
+            $filters['start_date'] = DateConverterHelper::shamsi_to_miladi($filters['start_date']);
+            $filters['end_date'] = DateConverterHelper::shamsi_to_miladi($filters['end_date']);
+        } else {
             $dateRange = CurrentJalaliMonth::getCurrentMonth();
-
-            $startDate = DateConverterHelper::shamsi_to_miladi($dateRange['start_date']);
-            $endDate = DateConverterHelper::shamsi_to_miladi($dateRange['end_date']);
+            $filters['start_date'] = DateConverterHelper::shamsi_to_miladi($dateRange['start_date']);
+            $filters['end_date'] = DateConverterHelper::shamsi_to_miladi($dateRange['end_date']);
         }
 
-        $clocks = $this->clockRepository->getClocksMonthlyReport($userId, $startDate, $endDate);
+        $clocks = $this->clockRepository->getClocksMonthlyReport($userId, $filters);
         $totalTimeValue = $this->clockRepository->calculateTotalTimeValue($clocks);
 
         return [
             'total_time' => $totalTimeValue,
-            'start_date' => $startDate,
-            'end_date' => $endDate,
+            'start_date' => $filters['start_date'],
+            'end_date' => $filters['end_date'],
         ];
     }
 }

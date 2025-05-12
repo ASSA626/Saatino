@@ -1,5 +1,4 @@
 import DialogLayout from "@/layouts/dialog.layout";
-import {Button} from "@/components/ui/button";
 import {minToClock} from "@/lib/minToClock";
 import moment from "moment-jalaali";
 
@@ -9,9 +8,10 @@ type ReportClockProps = {
     startDate: string;
     endDate: string;
     totalTimeValue: number;
+    user_id: number;
 }
 
-export default function ReportClocks({reportClockState, setReportClockState, startDate, endDate, totalTimeValue}: ReportClockProps) {
+export default function ReportClocks({reportClockState, setReportClockState, startDate, endDate, totalTimeValue, user_id}: ReportClockProps) {
     return (
         <DialogLayout state={reportClockState} setState={setReportClockState} title="گزارش گیری">
             <p className="text-center">در بازه زمانی {`${moment(startDate).format("jYYYY/jMM/jDD")} الی ${moment(endDate).format("jYYYY/jMM/jDD")}`} </p>
@@ -40,10 +40,10 @@ export default function ReportClocks({reportClockState, setReportClockState, sta
                     </div>
                 </div>
 
-                <Button size="xl" className="w-full bg-[#3a84e3] flex items-center gap-x-2 text-white hover:bg-[#1775ef] px-6 mt-3">
+                <a href={route('export.clock', {user_id: user_id, start_date: startDate, end_date: endDate})} className="h-9 px-4 py-2 rounded-md text-zinc-900-foreground shadow w-full bg-[#3a84e3] flex items-center justify-center gap-x-2 text-white hover:bg-[#1775ef] mt-3">
                     <img src="/static/icons/admin/report.svg" alt="plus icon" className="w-[28px]"/>
                     ایجاد گزارش جدید
-                </Button>
+                </a>
             </section>
         </DialogLayout>
     )

@@ -6,7 +6,7 @@
 
 @font-face {
     font-family: "IRANSasnWeb";
-    src: url("../fonts/IRANSansWeb_Light.ttf");
+    src: url("/static/fonts/IRANSansWeb_Light.ttf");
 }
 
 @theme {

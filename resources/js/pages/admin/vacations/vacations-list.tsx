@@ -3,19 +3,24 @@ import Datatable from "@/common/datatable.common";
 import Pagination from "@/common/pagination.common";
 import AdminLayout from "@/layouts/admin.layout";
 import StatusBadges from "@/components/shared/status-badges.component";
-import {PaginationType, VacationType} from "@/types";
+import {PaginationType, UserType, VacationType} from "@/types";
 import {useVacationsStore} from "@/stores/admin/useVacationsStore";
 import FiltersWrapper from "@/common/filters-wrapper.common";
-import {useState} from "react";
+import {FormEvent, useState} from "react";
+import {Button} from "@/components/ui/button";
+import toast from "react-hot-toast";
+import {convertPersianToGregorian} from "@/lib/persianToGregorianConverter";
 
 type SalariesListProps = {
     vacations: PaginationType<VacationType>;
-    vacations_count: number
+    vacations_count: number;
+    filters: any
 }
 
-export default function VacationsList({vacations, vacations_count}: SalariesListProps) {
+export default function VacationsList({vacations, vacations_count, filters}: SalariesListProps) {
     const [vacationFilterModal, setVacationFilterModal] = useState<boolean>(false)
     const {deleteVacation} = useVacationsStore()
+    console.log(vacations)
 
     const vacationsTable = [
         {key: 'user.name', label: 'درخواست دهنده'},
@@ -33,6 +38,13 @@ export default function VacationsList({vacations, vacations_count}: SalariesList
             },
         },
     ];
+
+    const handleExportClick = (e: FormEvent) => {
+        if (!filters?.user_id) {
+            e.preventDefault();
+            toast.error('ابتدا یک کاربر از بخش فیلتر ها انتخاب کنید');
+        }
+    };
 
     return (
         <AdminLayout>
@@ -63,9 +75,24 @@ export default function VacationsList({vacations, vacations_count}: SalariesList
                         </TableInfo>
 
                         <Datatable columns={vacationsTable} data={vacations.data}/>
-                        {vacations.data.length > 0 && (
-                            <Pagination data={vacations}/>
-                        )}
+
+                        <div className="w-full flex items-center gap-x-3 border-t border-dashed border-gray-300 pt-3">
+                            {vacations.data.length > 0 && (
+                                <Pagination data={vacations} className="pt-0 mt-0 border-none"/>
+                            )}
+                            <a
+                                href={filters?.user_id ? route('export.vacations', {user_id: filters?.user_id, start_date: convertPersianToGregorian(filters?.start_date), end_date: convertPersianToGregorian(filters?.end_date)}) : '#'}
+                                onClick={handleExportClick}
+                                className="h-9 py-2 px-5 rounded-sm bg-[#3a84e3] flex items-center justify-center gap-x-1.5 text-white hover:bg-[#1775ef] text-sm"
+                            >
+                                <img
+                                    src="/static/icons/admin/report.svg"
+                                    alt="plus icon"
+                                    className="w-[22px]"
+                                />
+                                گزارشگیری
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

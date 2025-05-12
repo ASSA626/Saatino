@@ -1,18 +1,23 @@
 <?php
 
-namespace App\Services\Admin\Exports\Clocks;
+namespace App\Services\Admin\Exports\ClocksExport;
 
 use App\Actions\VacationReportDataAction;
-use App\Helper\CurrentJalaliMonth;
 use App\Helper\DateConverterHelper;
 use App\Services\Admin\Users\UsersManageService;
-use App\Repositories\Admin\Exports\Clocks\ExportPdfClocksRepository;
+use App\Repositories\Admin\Exports\ClocksExport\ExportPdfClocksRepository;
+use App\Services\Service;
 use Carbon\Carbon;
 use Hekmatinasser\Verta\Verta;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use Spatie\Browsershot\Browsershot;
+use Spatie\LaravelPdf\Enums\Format;
+use function Spatie\LaravelPdf\Support\pdf;
+use Spatie\LaravelPdf\PdfBuilder;
 
-class ExportPdfClocksService
+class ExportPdfClocksService extends Service
 {
     public function __construct(
         protected ExportPdfClocksRepository $exportPdfClocksRepository,
@@ -20,33 +25,18 @@ class ExportPdfClocksService
         protected VacationReportDataAction  $vacationReportDataAction,
     ){}
 
-    public function exportClocksReport(int $userId, ?string $startDate = null, ?string $endDate = null)
+    public function exportClocksReport(int $userId, ?string $startDate = null, ?string $endDate = null): PdfBuilder
     {
-        [$startDate, $endDate] = $this->resolveDateRange($startDate, $endDate);
-        $startGeo = DateConverterHelper::shamsi_to_miladi($startDate);
-        $endGeo = DateConverterHelper::shamsi_to_miladi($endDate);
-
+        $format = 'a4';
         $user = $this->usersManageService->getUserById($userId);
         $clocks = $this->exportPdfClocksRepository
-            ->getClocksExportData($userId, $startGeo, $endGeo)
+            ->getClocksExportData($userId, $startDate, $endDate)
             ->groupBy(fn($item) => Carbon::parse($item->created_date)->format('Y-m-d'));
 
-        $report = $this->prepareReportData($clocks, $startGeo, $endGeo);
+        $report = $this->prepareReportData($clocks, $startDate, $endDate);
         $projectReport = $this->projectWorklog($clocks);
         $vacationReport = $this->vacationReportDataAction->execute($userId, $startDate, $endDate);
-
-        dd($user, $report, $startDate, $endDate, $projectReport, $vacationReport);
-        // return $this->generatePdf($user, DateConverterHelper::miladi_to_shamsi($startDate), DateConverterHelper::miladi_to_shamsi($endDate), $report);
-    }
-
-    protected function resolveDateRange(?string $start, ?string $end): array
-    {
-        if (!$start || !$end) {
-            $jalali = CurrentJalaliMonth::getCurrentMonth();
-            $start = $jalali['start_date'];
-            $end = $jalali['end_date'];
-        }
-        return [$start, $end];
+        return $this->generatePdf($user, $startDate, $endDate, $report, $projectReport, $vacationReport, $format);
     }
 
     protected function prepareReportData(Collection $clocksByDate, string $startDate, string $endDate): array
@@ -101,7 +91,6 @@ class ExportPdfClocksService
     protected function projectWorklog(Collection $clocks): array
     {
         $clockIds = $clocks->flatten()->pluck('id')->toArray();
-
         if (empty($clockIds)) {
             return [];
         }
@@ -116,10 +105,27 @@ class ExportPdfClocksService
         $result = [];
         foreach ($worklogs as $worklog) {
             $totalMinutes = (int)$worklog->total_time;
-            $formattedTime = sprintf('%02d:%02d', floor($totalMinutes / 60), $totalMinutes % 60);
-            $result[$worklog->project_name] = $formattedTime;
+            $hoursDecimal = round($totalMinutes / 60, 1);
+
+            $result[] = [
+                'project' => $worklog->project_name,
+                'time' => $hoursDecimal
+            ];
         }
 
         return $result;
+    }
+
+    protected function generatePdf($user, string $start_date, string $end_date, array $reports, array $projects, array $vacations, string $format): PdfBuilder
+    {
+        $pdf_name = ($start_date.$end_date.$user->name.Str::random(5) . '.pdf');
+        return pdf()->view('pdf.clock-report', compact('user', 'start_date', 'end_date', 'reports', 'projects', 'vacations', 'format'))
+            ->withBrowsershot(function (Browsershot $browsershot) {
+                $browsershot->noSandbox();
+                $browsershot->setChromePath("C:\Users\win 10\.cache\puppeteer\chrome\win64-132.0.6834.110\chrome-win64\chrome.exe");
+            })
+            ->format($format === 'a4' ? Format::A4 : Format::A5)
+            ->name($pdf_name)
+            ->download();
     }
 }

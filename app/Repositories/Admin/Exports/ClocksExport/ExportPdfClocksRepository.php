@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories\Admin\Exports\Clocks;
+namespace App\Repositories\Admin\Exports\ClocksExport;
 
 use App\Models\Clock;
 use Illuminate\Database\Eloquent\Collection;

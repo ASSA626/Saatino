@@ -24,7 +24,7 @@ class ClockManageController extends Controller
         if ($user_id) {
             $user = $this->usersService->getUserById($user_id);
             $clocks = $this->clocksService->getAllClockUserPaginate($user_id, filters: $filters);
-            $report = $this->clocksService->reportClock($user_id, $filters['start_date'], $filters['end_date']);
+            $report = $this->clocksService->reportClock($user_id, $filters);
             $clocks_count = 10;
         } else {
             $user = null;

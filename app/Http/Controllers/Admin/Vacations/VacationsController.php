@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Vacations;
 
 use App\Http\Controllers\Controller;
+use App\Services\Admin\Users\UsersManageService;
 use App\Services\Admin\Vacations\VacationManageService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -11,7 +12,8 @@ use Inertia\Response;
 class VacationsController extends Controller
 {
     public function __construct(
-        protected VacationManageService $vacationService
+        protected VacationManageService $vacationService,
+        protected UsersManageService $usersManageService
     ){}
 
     public function index(Request $request): Response
@@ -22,7 +24,8 @@ class VacationsController extends Controller
 
         return Inertia::render('admin/vacations/vacations-list', [
             'vacations' => $vacations,
-            'vacations_count' => $vacations_count
+            'vacations_count' => $vacations_count,
+            'filters' => $filters
         ]);
     }
 

@@ -52,7 +52,6 @@ export default function Datatable({columns, data, actions = [], onEditRow}: Tabl
             if (options.fromFormat) {
                 dateObj = moment(value, options.fromFormat);
             } else {
-                // روش 1: اضافه کردن یک روز به تاریخ
                 dateObj = moment(value);
             }
             if (!dateObj.isValid()) {

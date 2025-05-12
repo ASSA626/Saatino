@@ -21,6 +21,7 @@ type ClocksManagementListProps = {
 }
 
 export default function ClockManagement({clocks, clocks_count, user, report}: ClocksManagementListProps) {
+    console.log(clocks)
     const [addClockState, setAddClockState] = useState<boolean>(false)
     const [editClockState, setEditClockState] = useState<boolean>(false)
     const [reportClockState, setReportClockState] = useState<boolean>(false)
@@ -35,7 +36,7 @@ export default function ClockManagement({clocks, clocks_count, user, report}: Cl
         {key: 'start_clock', label: 'ساعت ورود', prefix: 'ساعت'},
         {key: 'left_clock', label: 'ساعت خروج', prefix: 'ساعت'},
         {key: 'time_value', label: 'مقدار کارکرد', formatTime: true},
-        {key: 'worklog_status', label: 'وضعیت', render: (value: string) => (<StatusBadges status={value}/>)},
+        {key: 'worklog_status', label: 'وضعیت کارکرد ها', render: (value: string) => (<StatusBadges status={value}/>)},
         {
             key: 'delete_action',
             label: 'حذف',
@@ -102,9 +103,9 @@ export default function ClockManagement({clocks, clocks_count, user, report}: Cl
                 }}
                 route={`/admin/clocks/report/${user.id}`}
             />
+            <ReportClocks reportClockState={reportClockState} setReportClockState={setReportClockState} startDate={report.start_date} endDate={report.end_date} totalTimeValue={report.total_time} user_id={user.id}/>
             <EditClock editClockState={editClockState} setEditClockState={setEditClockState} selectedClock={editSelectedClock}/>
             <SelectUserWrapper wrapperState={selectUserState} setWrapperState={setSelectUserState} />
-            <ReportClocks reportClockState={reportClockState} setReportClockState={setReportClockState} startDate={report.start_date} endDate={report.end_date} totalTimeValue={report.total_time}/>
             <AddClock addClockState={addClockState} setAddClockState={setAddClockState}/>
 
             <div className="flex w-full flex-row max-xl:max-h-screen max-xl:overflow-y-scroll">

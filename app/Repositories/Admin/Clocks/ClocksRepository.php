@@ -27,10 +27,16 @@ class ClocksRepository
             ->paginate($perPage);
     }
 
-    public function getClocksMonthlyReport(int $userId, string $startDate, string $endDate): Collection
+    public function getClocksMonthlyReport(int $userId, ?array $filters = []): Collection
     {
         return Clock::query()->where('user_id', $userId)
-            ->whereBetween('created_date', [$startDate, $endDate])
+            ->whereBetween('created_date', [$filters['start_date'], $filters['end_date']])
+            ->when(!empty($filters['clock_type']), function ($query) use ($filters) {
+                $query->where('clock_type', $filters['clock_type']);
+            })
+            ->when(!empty($filters['worklogs_type']), function ($query) use ($filters) {
+                $query->where('worklog_status', $filters['worklogs_type']);
+            })
             ->get();
     }
 

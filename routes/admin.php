@@ -3,8 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\Users\UsersController;
 use App\Http\Controllers\Admin\Salaries\SalariesController;
-use App\Http\Controllers\Admin\Vacations\VacationsController;
-use App\Http\Controllers\Admin\Clocks\ClockManageController;
+use App\Http\Controllers\Admin\Vacations\{VacationsController, ExportPdfVacationsController};
+use App\Http\Controllers\Admin\Clocks\{ClockManageController, ExportPdfClocksController};
 
 Route::middleware(['admin', 'auth'])->prefix('/admin')->group(function () {
     /* Users resource routes */
@@ -16,7 +16,7 @@ Route::middleware(['admin', 'auth'])->prefix('/admin')->group(function () {
         'destroy' => 'admin.salaries.destroy'
     ]);
 
-    /* Vacations resource route */
+    /* VacationsExport resource route */
     Route::resource('/vacations', VacationsController::class)->only(['index', 'destroy'])->names([
         'index' => 'admin.vacations.index',
         'destroy' => 'admin.vacations.destroy'
@@ -27,5 +27,7 @@ Route::middleware(['admin', 'auth'])->prefix('/admin')->group(function () {
     Route::post('/clock/create', [ClockManageController::class, 'storeClock'])->name('admin.createClock');
     Route::put('/clocks/{clock_id}/update', [ClockManageController::class, 'updateClock'])->name('admin.updateClock');
 
-    Route::get('/reports/clocks/report/{user_id}/{start_date?}/{end_date?}', [\App\Http\Controllers\Admin\Clocks\ExportPdfClocksController::class, 'generateTimesheetReport'])->name('report.test');
+    /* PDF exports GET routes */
+    Route::get('/clocks/export/{user_id}/{start_date?}/{end_date?}', [ExportPdfClocksController::class, 'generateTimesheetReport'])->name('export.clock');
+    Route::get('/vacations/export/{user_id}/{start_date?}/{end_date?}', [ExportPdfVacationsController::class, 'generateVacationsReport'])->name('export.vacations');
 });

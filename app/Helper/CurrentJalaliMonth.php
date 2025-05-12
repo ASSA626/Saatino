@@ -10,15 +10,12 @@ class CurrentJalaliMonth
     {
         $now = new Verta();
 
-        // تنظیم روز به اول ماه جاری
         $startOfMonth = (clone $now)->startMonth();
-
-        // تنظیم روز به آخر ماه جاری
         $endOfMonth = (clone $now)->endMonth();
 
         return [
-            'start_date' => $startOfMonth->format('Y/m/d'), // با اسلش
-            'end_date' => $endOfMonth->format('Y/m/d')      // با اسلش
+            'start_date' => $startOfMonth->format('Y/m/d'),
+            'end_date' => $endOfMonth->format('Y/m/d')
         ];
     }
 }

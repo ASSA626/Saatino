@@ -26,7 +26,7 @@ class VacationReportDataAction
         $remaining = max(0, $remaining);
 
         return [
-            'used_in_month' => $usedInRange,
+            'used_in_daterange' => $usedInRange,
             'remaining' => $remaining,
             'total_used_in_year' => $totalUsedInYear
         ];
@@ -35,7 +35,7 @@ class VacationReportDataAction
     protected function determineDateRange(?string $startDate, ?string $endDate): array
     {
         if ($startDate && $endDate) {
-            return [DateConverterHelper::shamsi_to_miladi($startDate), DateConverterHelper::shamsi_to_miladi($endDate)];
+            return [$startDate, $endDate];
         }
 
         $jalali = CurrentJalaliMonth::getCurrentMonth();
@@ -67,15 +67,8 @@ class VacationReportDataAction
     {
         return Vacation::query()
             ->where('user_id', $userId)
-            ->where(function($query) use ($startDate, $endDate) {
-                $query->where(function($q) use ($startDate, $endDate) {
-                    $q->whereDate('start_date', '>=', $startDate)
-                        ->whereDate('start_date', '<=', $endDate);
-                })->orWhere(function($q) use ($startDate, $endDate) {
-                    $q->whereDate('start_date', '<', $startDate)
-                        ->whereDate('end_date', '>=', $startDate);
-                });
-            })->get();
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->get();
     }
 
     protected function calculateVacationDays(Collection $vacations): float
