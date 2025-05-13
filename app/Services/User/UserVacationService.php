@@ -16,6 +16,10 @@ class UserVacationService extends Service
 
     public function getUserVacation(int $user_id, array $filters = []): LengthAwarePaginator
     {
+        if (!empty($filters['start_date'])) {
+            $filters['start_date'] = DateConverterHelper::shamsi_to_miladi($filters['start_date']);
+            $filters['left_date'] = DateConverterHelper::shamsi_to_miladi($filters['left_date']);
+        }
         return $this->vacationRepository->all($user_id, $filters);
     }
 

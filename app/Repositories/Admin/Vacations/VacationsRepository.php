@@ -27,6 +27,26 @@ class VacationsRepository
             ->paginate($perPage);
     }
 
+    public function getVacationById(int $vacation_id): Vacation
+    {
+        return Vacation::query()->findOrFail($vacation_id);
+    }
+
+    public function updateVacationStatus(int $vacation_id, string $status): void
+    {
+        $vacation = $this->getVacationById($vacation_id);
+        $vacation->update([
+            'status' => $status,
+            'report_caption' => null
+        ]);
+    }
+
+    public function updateVacationReportCaption(int $vacation_id, string $report): void
+    {
+        $vacation = $this->getVacationById($vacation_id);
+        $vacation->update(['report_caption' => $report]);
+    }
+
     public function deleteVacation(int $id): bool
     {
         return Vacation::destroy($id);

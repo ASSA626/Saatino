@@ -18,7 +18,7 @@ class VacationsController extends Controller
     public function index(Request $request): Response
     {
         $user_id = auth()->id();
-        $filters = $request->only(['start_date', 'end_date', 'status', 'vacation_type']);
+        $filters = $request->only(['start_date', 'left_date', 'status', 'vacation_type']);
         $vacations = $this->vacationService->getUserVacation($user_id, $filters);
 
         return Inertia::render('user/vacations/vacations', [

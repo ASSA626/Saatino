@@ -15,10 +15,11 @@ class SalariesController extends Controller
         protected UserSalariesService $salariesService
     ){}
 
-    public function index(): Response
+    public function index(Request $request): Response
     {
         $user_id = auth()->id();
-        $salaries = $this->salariesService->getUserSalaries($user_id);
+        $filters = $request->only(['start_date', 'left_date', 'status']);
+        $salaries = $this->salariesService->getUserSalaries($user_id, $filters);
 
         return Inertia::render('user/salaries/salaries', [
             'salaries' => $salaries

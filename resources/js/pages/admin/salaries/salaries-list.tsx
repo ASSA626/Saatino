@@ -15,7 +15,6 @@ type SalariesListProps = {
 
 export default function SalariesList({salaries, salaries_count}: SalariesListProps) {
     const [salariesFilterModal, setSalariesFilterModal] = useState<boolean>(false)
-
     const {deleteSalary} = useSalariesStore()
 
     const salariesTable = [
@@ -25,13 +24,13 @@ export default function SalariesList({salaries, salaries_count}: SalariesListPro
         {key: 'value', label: 'مقدار واحد', suffix: "تومان"},
         {key: 'count', label: 'تعداد', suffix: "عدد"},
         {key: 'total', label: 'مبلغ کل', suffix: "تومان"},
-        {key: 'status', label: 'وضعیت', render: (value: string) => (<StatusBadges status={value}/>)},
+        {key: 'status', label: 'وضعیت', render: (value: string, row: Record<string, any>) => (<StatusBadges status={value} statuses={['unconfirmed', 'confirmed', 'confirming']} route={route('admin.vacation.changeStatus', row.id)}/>)},
         {
             key: 'delete_action',
             label: 'حذف',
             action: {
                 label: 'حذف',
-                onClick: () => alert("delete"),
+                onClick: (row: Record<string, any>) => deleteSalary(row.id),
             },
         },
     ];

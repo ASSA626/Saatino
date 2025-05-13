@@ -21,6 +21,8 @@ Route::middleware(['admin', 'auth'])->prefix('/admin')->group(function () {
         'index' => 'admin.vacations.index',
         'destroy' => 'admin.vacations.destroy'
     ]);
+    Route::post('/vacations/update/{vacation_id}/status', [VacationsController::class, 'changeVacationStatus'])->name('admin.vacation.changeStatus');
+    Route::post('/vacations/update/{vacation_id}/report_caption', [VacationsController::class, 'updateVacationReportCaption'])->name('admin.vacation.updateReportCaption');
 
     /* Clock's report GET routes */
     Route::get('/clocks/report/{user_id?}', [ClockManageController::class, 'showClocks'])->name('admin.clocks');
@@ -28,6 +30,7 @@ Route::middleware(['admin', 'auth'])->prefix('/admin')->group(function () {
     Route::put('/clocks/{clock_id}/update', [ClockManageController::class, 'updateClock'])->name('admin.updateClock');
 
     /* PDF exports GET routes */
-    Route::get('/clocks/export/{user_id}/{start_date?}/{end_date?}', [ExportPdfClocksController::class, 'generateTimesheetReport'])->name('export.clock');
-    Route::get('/vacations/export/{user_id}/{start_date?}/{end_date?}', [ExportPdfVacationsController::class, 'generateVacationsReport'])->name('export.vacations');
+    Route::get('/export/clocks/{user_id}/{start_date?}/{end_date?}', [ExportPdfClocksController::class, 'generateTimesheetReport'])->name('export.clock');
+    Route::get('/export/vacations/{user_id}/{start_date?}/{end_date?}', [ExportPdfVacationsController::class, 'generateVacationsReport'])->name('export.vacations');
+    Route::get('/export/vacation/{vacation_id}', [ExportPdfVacationsController::class, 'generateVacationReportById'])->name('export.vacation');
 });

@@ -1,5 +1,5 @@
 import DialogLayout from "@/layouts/dialog.layout";
-import {Input} from "@/components/shared/input.components";
+import {Input, InputDatePicker} from "@/components/shared/input.components";
 import SelectBox from "@/components/shared/select-box.component";
 import {Button} from "@/components/ui/button";
 import {FormEvent, useState} from "react";
@@ -116,10 +116,10 @@ export default function FiltersWrapper({wrapperState, setWrapperState, settings,
 
                 {settings.showDateRange && (
                     <div className="flex items-center gap-x-2 border-b border-dashed border-gray-400 pb-4">
-                        <Input id="start_time" label="از تاریخ" value={data.start_date}
-                               onChange={(e) => setData("start_date", e.target.value)}/>
-                        <Input id="left_date" label="تا تاریخ" value={data.left_date}
-                               onChange={(e) => setData("left_date", e.target.value)}/>
+                        <InputDatePicker id="start_time" label="از تاریخ" value={data.start_date}
+                               onChange={(formattedDate) => setData("start_date", formattedDate)}/>
+                        <InputDatePicker id="left_date" label="تا تاریخ" value={data.left_date}
+                               onChange={(formattedDate) => setData("left_date", formattedDate)}/>
                     </div>
                 )}
 

@@ -34,6 +34,18 @@ class VacationsController extends Controller
         $this->vacationService->deleteVacation($id);
     }
 
+    public function changeVacationStatus(Request $request, int $vacation_id): void
+    {
+        $status = $request->input('status');
+        $this->vacationService->changeVacationStatus($vacation_id, $status);
+    }
+
+    public function updateVacationReportCaption(Request $request, int $vacation_id): void
+    {
+        $report = $request->input('report_caption');
+        $this->vacationService->updateVacationReportCaption($vacation_id, $report);
+    }
+
     private function getFiltersFromRequest(Request $request): array
     {
         return [

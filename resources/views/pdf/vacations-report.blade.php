@@ -57,9 +57,11 @@
                         <td class="text-[10px] p-0 font-bold border border-gray-200 !h-[6px]">{{ $loop->iteration }}</td>
                         <td class="text-[10px] p-0 font-bold border border-gray-200 !h-[6px]">{{ $vacation['vacation_type'] }}</td>
                         <td class="text-[10px] p-0 font-bold border border-gray-200 !h-[6px]">{{ \App\Helper\DateConverterHelper::miladi_to_shamsi($vacation['created_at']) }}</td>
-                        <td class="text-[10px] p-0 font-bold border border-gray-200 !h-[6px]">{{ $vacation['start_date'] }}</td>
-                        <td class="text-[10px] p-0 font-bold border border-gray-200 !h-[6px]">{{ $vacation['end_date'] }}</td>
-                        <td class="text-[10px] p-0 font-bold border border-gray-200 !h-[6px]">{{ $vacation['status'] }}</td>
+                        @if($vacation['vacation_type'] !== "ساعتی")
+                            <td class="text-[10px] p-0 font-bold border border-gray-200 !h-[6px]">{{ \App\Helper\DateConverterHelper::miladi_to_shamsi($vacation['start_date']) }}</td>
+                            <td class="text-[10px] p-0 font-bold border border-gray-200 !h-[6px]">{{ \App\Helper\DateConverterHelper::miladi_to_shamsi($vacation['end_date']) }}</td>
+                        @endif
+                        <td class="text-[10px] p-0 font-bold border border-gray-200 !h-[6px]">@if($vacation['status'] === 'confirmed') تایید شده@elseif($vacation['status'] === 'unconfirmed')  تایید نشده @else در انتظار تایید @endif</td>
                     </tr>
                 @endforeach
                 </tbody>

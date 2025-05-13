@@ -92,7 +92,7 @@ export default function Datatable({columns, data, actions = [], onEditRow}: Tabl
                 return (
                     <button
                         type="button"
-                        className="text-[14px] rounded-lg border border-gray-300 px-4 py-1.5 font-semibold text-gray-700"
+                        className="text-[14px] rounded-lg border border-gray-300 px-4 py-1.5 font-semibold text-gray-700 cursor-pointer"
                         onClick={() => {
                             if (onEditRow) {
                                 onEditRow(row);
@@ -108,7 +108,7 @@ export default function Datatable({columns, data, actions = [], onEditRow}: Tabl
             return (
                 <button
                     type="button"
-                    className="text-[14px] rounded-lg border border-gray-300 px-4 py-1.5 font-semibold text-gray-700"
+                    className="text-[14px] rounded-lg border border-gray-300 px-4 py-1.5 font-semibold text-gray-700 cursor-pointer"
                     onClick={() => action.onClick(row)}
                 >
                     {action.label}
@@ -123,7 +123,7 @@ export default function Datatable({columns, data, actions = [], onEditRow}: Tabl
                         <button
                             key={index}
                             type="button"
-                            className="view-all-btn"
+                            className="text-[14px] rounded-lg border border-gray-300 px-4 py-1.5 font-semibold text-gray-700 cursor-pointer"
                             onClick={() => {
                                 if (action.label === 'ویرایش' && onEditRow) {
                                     onEditRow(row);

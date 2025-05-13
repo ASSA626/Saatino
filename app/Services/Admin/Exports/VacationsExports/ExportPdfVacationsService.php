@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Str;
 use Spatie\Browsershot\Browsershot;
 use Spatie\LaravelPdf\Enums\Format;
+use Spatie\LaravelPdf\PdfBuilder;
 use function Spatie\LaravelPdf\Support\pdf;
 
 class ExportPdfVacationsService extends Service
@@ -22,7 +23,7 @@ class ExportPdfVacationsService extends Service
         protected ExportPdfVacationsRepository $exportPdfVacationsRepository
     ){}
 
-    public function exportVacationReport(int $userId, ?string $startDate = null, ?string $endDate = null)
+    public function exportVacationsReport(int $userId, ?string $startDate = null, ?string $endDate = null): PdfBuilder
     {
         $dateRange = $this->getDateRange($startDate, $endDate);
 
@@ -56,10 +57,10 @@ class ExportPdfVacationsService extends Service
         ];
     }
 
-    protected function generatePdf($user, string $start_date, string $end_date, Collection $vacations, array $vacation_report, string $format)
+    protected function generatePdf($user, string $start_date, string $end_date, Collection $vacations, array $vacation_report, string $format): PdfBuilder
     {
         $pdf_name = ($start_date.$end_date.$user->name.Str::random(5) . '.pdf');
-        return pdf()->view('pdf.vacarions-report', compact('user', 'start_date', 'end_date', 'vacations', 'vacation_report', 'format'))
+        return pdf()->view('pdf.vacations-report', compact('user', 'start_date', 'end_date', 'vacations', 'vacation_report', 'format'))
             ->withBrowsershot(function (Browsershot $browsershot) {
                 $browsershot->noSandbox();
                 $browsershot->setChromePath("C:\Users\win 10\.cache\puppeteer\chrome\win64-132.0.6834.110\chrome-win64\chrome.exe");

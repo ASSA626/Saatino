@@ -19,8 +19,9 @@ type SalariesListProps = {
 
 export default function VacationsList({vacations, vacations_count, filters}: SalariesListProps) {
     const [vacationFilterModal, setVacationFilterModal] = useState<boolean>(false)
-    const {deleteVacation} = useVacationsStore()
-    console.log(vacations)
+    const [vacationReportCaption, setVacationReportCaption] = useState<boolean>(false)
+
+    const {deleteVacation, getVacationExport} = useVacationsStore()
 
     const vacationsTable = [
         {key: 'user.name', label: 'درخواست دهنده'},
@@ -28,13 +29,34 @@ export default function VacationsList({vacations, vacations_count, filters}: Sal
         {key: 'vacation_type', label: 'نوع مرخصی'},
         {key: 'start_date', label: 'از تاریخ', formatDate: true},
         {key: 'end_date', label: 'تا تاریخ', formatDate: true},
-        {key: 'status', label: 'وضعیت', render: (value: string) => (<StatusBadges status={value}/>)},
+        {
+            key: 'status',
+            label: 'وضعیت',
+            render: (value: string, row: Record<string, any>) => (
+                <StatusBadges
+                    status={value}
+                    statuses={['unconfirmed', 'confirmed', 'confirming']}
+                    route={route('admin.vacation.changeStatus', row.id)}
+                    id={row.id}
+                    reportCaptionState={vacationReportCaption}
+                    setReportCaptionState={setVacationReportCaption}
+                />
+            )
+        },
+        {
+            key: 'export_action',
+            label: 'چاپ',
+            action: {
+                label: 'چاپ مرخصی',
+                onClick: (row: Record<string, any>) => getVacationExport(row.id),
+            },
+        },
         {
             key: 'delete_action',
             label: 'حذف',
             action: {
                 label: 'حذف',
-                onClick: () => alert("delete"),
+                onClick: (row: Record<string, any>) => deleteVacation(row.id),
             },
         },
     ];

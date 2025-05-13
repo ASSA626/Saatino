@@ -23,24 +23,24 @@ export default function ReportClocks({reportClockState, setReportClockState, sta
                     </div>
                 </div>
 
-                <div className="w-full text-center mt-4 p-4 border border-dashed border-gray-400 rounded-lg">
-                    <div className="flex items-center justify-between border-b border-dashed border-gray-400 pb-3">
-                        <p>مقدار ساعات دفتری</p>
-                        <p className="text-lg font-semibold">5 ساعت</p>
-                    </div>
+                {/*<div className="w-full text-center mt-4 p-4 border border-dashed border-gray-400 rounded-lg">*/}
+                {/*    <div className="flex items-center justify-between border-b border-dashed border-gray-400 pb-3">*/}
+                {/*        <p>مقدار ساعات دفتری</p>*/}
+                {/*        <p className="text-lg font-semibold">5 ساعت</p>*/}
+                {/*    </div>*/}
 
-                    <div className="flex items-center justify-between border-b border-dashed border-gray-400 pb-3 mt-3">
-                        <p>مقدار کار در منزل</p>
-                        <p className="text-lg font-semibold">0 ساعت</p>
-                    </div>
+                {/*    <div className="flex items-center justify-between border-b border-dashed border-gray-400 pb-3 mt-3">*/}
+                {/*        <p>مقدار کار در منزل</p>*/}
+                {/*        <p className="text-lg font-semibold">0 ساعت</p>*/}
+                {/*    </div>*/}
 
-                    <div className="flex items-center justify-between mt-3">
-                        <p>مقدار ساعت ماموریت</p>
-                        <p className="text-lg font-semibold">0 ساعت</p>
-                    </div>
-                </div>
+                {/*    <div className="flex items-center justify-between mt-3">*/}
+                {/*        <p>مقدار ساعت ماموریت</p>*/}
+                {/*        <p className="text-lg font-semibold">0 ساعت</p>*/}
+                {/*    </div>*/}
+                {/*</div>*/}
 
-                <a href={route('export.clock', {user_id: user_id, start_date: startDate, end_date: endDate})} className="h-9 px-4 py-2 rounded-md text-zinc-900-foreground shadow w-full bg-[#3a84e3] flex items-center justify-center gap-x-2 text-white hover:bg-[#1775ef] mt-3">
+                <a href={route('export.clock', {user_id: user_id, start_date: startDate, end_date: endDate})} className="h-11 px-4 py-2 rounded-md text-zinc-900-foreground shadow w-full bg-[#3a84e3] flex items-center justify-center gap-x-2 text-white hover:bg-[#1775ef] mt-3">
                     <img src="/static/icons/admin/report.svg" alt="plus icon" className="w-[28px]"/>
                     ایجاد گزارش جدید
                 </a>

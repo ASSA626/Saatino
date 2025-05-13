@@ -39,8 +39,11 @@ class VacationReportDataAction
         }
 
         $jalali = CurrentJalaliMonth::getCurrentMonth();
-        $start = $jalali['start_date'];
-        $end = $jalali['end_date'];
+        $startJalali = $jalali['start_date'];
+        $endJalali = $jalali['end_date'];
+
+        $start = DateConverterHelper::shamsi_to_miladi($startJalali);
+        $end = DateConverterHelper::shamsi_to_miladi($endJalali);
 
         return [$start, $end];
     }

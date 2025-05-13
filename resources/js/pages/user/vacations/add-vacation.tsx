@@ -1,5 +1,5 @@
 import DialogLayout from "@/layouts/dialog.layout";
-import {Input} from "@/components/shared/input.components";
+import {Input, InputClock, InputDatePicker} from "@/components/shared/input.components";
 import {Button} from "@/components/ui/button";
 import SelectBox from "@/components/shared/select-box.component";
 import {useForm} from "@inertiajs/react";
@@ -15,6 +15,7 @@ type VacationForm = {
     vacation_type: string,
     start_date: string,
     end_date: string,
+    caption: string,
 }
 
 export default function AddVacation({createVacationState, setCreateVacationState}: CreateVacationType) {
@@ -24,8 +25,8 @@ export default function AddVacation({createVacationState, setCreateVacationState
         vacation_type: '',
         start_date: '',
         end_date: '',
+        caption: '',
     })
-    console.log(data)
 
     const vacationTypeOpt = [
         {value: "بدون حقوق", label: "بدون حقوق"},
@@ -53,28 +54,50 @@ export default function AddVacation({createVacationState, setCreateVacationState
                     />
 
                     <div className="flex items-center gap-x-2 w-full">
-                        <Input
-                            id="start_time"
-                            label="از تاریخ"
-                            value={data.start_date}
-                            onChange={(e) => setData("start_date", e.target.value)}
-                        />
+                        {data.vacation_type !== "ساعتی" ? (
+                            <>
+                                <InputDatePicker
+                                    id="start_time"
+                                    label="از تاریخ"
+                                    value={data.start_date}
+                                    onChange={(formattedDate) => setData("start_date", formattedDate)}
+                                />
 
-                        <Input
-                            id="end_time"
-                            label="تا تاریخ"
-                            value={data.end_date}
-                            onChange={(e) => setData("end_date", e.target.value)}
-                        />
+                                <InputDatePicker
+                                    id="end_time"
+                                    label="تا تاریخ"
+                                    value={data.end_date}
+                                    onChange={(formattedDate) => setData("end_date", formattedDate)}
+                                />
+                            </>
+                        ) : (
+                            <>
+                                <InputClock
+                                    id="start_time"
+                                    label="از ساعت"
+                                    value={data.start_date}
+                                    onChange={(e) => setData("start_date", e.target.value)}
+                                />
+
+                                <InputClock
+                                    id="end_time"
+                                    label="تا ساعت"
+                                    value={data.end_date}
+                                    onChange={(e) => setData("end_date", e.target.value)}
+                                />
+                            </>
+                        )}
                     </div>
+
+                    <Input
+                        id="caption"
+                        label="توضیحات"
+                        value={data.caption}
+                        onChange={(e) => setData("caption", e.target.value)}
+                    />
                 </div>
 
-                <div className="w-full border border-dashed border-gray-400 p-3 rounded-md my-3 text-center">
-                    مقدار مرخصی: 3 روز
-                </div>
-
-                <Button size="xl"
-                        className="bg-[#3a84e3] flex items-center gap-x-2 text-white hover:bg-[#1775ef] w-full mt-2">
+                <Button size="xl" className="bg-[#3a84e3] flex items-center gap-x-2 text-white hover:bg-[#1775ef] w-full mt-4">
                     <img src="/static/icons/light/light-plus-icon.svg" alt="plus icon" className="w-[26px]"/>
                     ثبت مرخصی جدید
                 </Button>

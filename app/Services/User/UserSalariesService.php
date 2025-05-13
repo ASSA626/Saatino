@@ -2,6 +2,7 @@
 
 namespace App\Services\User;
 
+use App\Helper\DateConverterHelper;
 use App\Models\Salary;
 use App\Repositories\User\UserSalariesRepository;
 use App\Services\Service;
@@ -13,9 +14,13 @@ class UserSalariesService extends Service
         protected UserSalariesRepository $salariesRepository
     ){}
 
-    public function getUserSalaries(int $user_id): LengthAwarePaginator
+    public function getUserSalaries(int $user_id, array $filters = []): LengthAwarePaginator
     {
-        return $this->salariesRepository->getAll($user_id);
+        if (!empty($filters['start_date'])) {
+            $filters['start_date'] = DateConverterHelper::shamsi_to_miladi($filters['start_date']);
+            $filters['left_date'] = DateConverterHelper::shamsi_to_miladi($filters['left_date']);
+        }
+        return $this->salariesRepository->getAll($user_id, $filters);
     }
 
     public function createUserSalary(array $data): Salary

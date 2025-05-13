@@ -1,4 +1,7 @@
 import React, {ChangeEvent, useState} from "react";
+import DatePicker, {DateObject} from "react-multi-date-picker";
+import persian from "react-date-object/calendars/persian";
+import persian_fa from "react-date-object/locales/persian_fa";
 
 type InputParamsType = {
     id?: string,
@@ -8,6 +11,13 @@ type InputParamsType = {
     onChange?: (e: ChangeEvent<HTMLInputElement>) => void,
     disabled?: boolean,
     placeholder?: string
+}
+
+type InputDatePickerType = {
+    id?: string;
+    label?: string;
+    value?: string | number | null;
+    onChange: (formattedDate: string) => void;
 }
 
 export const Input = ({id, type, label, value, onChange, disabled, placeholder}: InputParamsType) => {
@@ -59,7 +69,7 @@ export const InputClock = ({id, type, label, value, onChange, disabled}: InputPa
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const formatted = format(e.target.value)
-        onChange?.({ ...e, target: { ...e.target, value: formatted } } as React.ChangeEvent<HTMLInputElement>)
+        onChange?.({...e, target: {...e.target, value: formatted}} as React.ChangeEvent<HTMLInputElement>)
     }
 
     return (
@@ -89,8 +99,62 @@ export const InputClock = ({id, type, label, value, onChange, disabled}: InputPa
     )
 }
 
-export const InputAuth = () => {
+export const InputDatePicker = ({value, id, onChange, label}: InputDatePickerType) => {
+    const [focused, setFocused] = useState(false);
+
+    const handleFocus = () => setFocused(true);
+    const handleBlur = () => setFocused(false);
+
+    const formatDate = (date: DateObject | string | number | null) => {
+        if (date instanceof DateObject) {
+            return `${date.year}/${(date.month.index + 1).toString().padStart(2, "0")}/${date.day
+                .toString()
+                .padStart(2, "0")}`;
+        }
+        return date?.toString() || "";
+    };
+
+    // مدیریت تغییر مقدار
+    const handleChange = (date: DateObject | string | number | null) => {
+        const formattedDate = formatDate(date);
+        onChange(formattedDate);
+    };
+
     return (
-        <input type="text"/>
+        <div className="relative w-full">
+            <DatePicker
+                inputClass="w-full p-[10px] border border-gray-400 rounded-md outline-none text-[#000] text-md "
+                containerClassName="w-full"
+                value={value}
+                onChange={handleChange}
+                calendar={persian}
+                locale={persian_fa}
+                render={(
+                    value: string | number | null,
+                    openCalendar: () => void,
+                    handleValueChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
+                ) => (
+                    <input
+                        type="text"
+                        className="w-full p-[10px] border border-gray-400 rounded-md outline-none text-[#000] text-md "
+                        value={value?.toString() || ""}
+                        onFocus={handleFocus}
+                        onBlur={handleBlur}
+                        onChange={handleValueChange}
+                        onClick={openCalendar}
+                    />
+                )}
+            />
+            <label
+                htmlFor={id}
+                className={`absolute right-0 p-[10px] text-md pointer-events-none text-gray-600 transition-all duration-150 ${
+                    focused || value
+                        ? `-top-3 text-[0.7rem] bg-white py-[2px] px-[10px] mr-2 rounded-sm`
+                        : `top-0}`
+                }`}
+            >
+                {label}
+            </label>
+        </div>
     )
 }

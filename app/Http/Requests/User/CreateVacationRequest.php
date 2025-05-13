@@ -26,6 +26,7 @@ class CreateVacationRequest extends FormRequest
             'vacation_type' => 'required',
             'start_date' => 'required',
             'end_date' => 'required',
+            'caption' => 'nullable',
         ];
     }
 }

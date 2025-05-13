@@ -18,7 +18,10 @@ return new class extends Migration
             $table->string('vacation_type');
             $table->date('start_date');
             $table->date('end_date');
+            $table->date('end_date');
             $table->string('status')->default(VacationStatusEnum::CONFIRMING->value);
+            $table->text('caption');
+            $table->text('report_caption');
             $table->timestamps();
         });
     }

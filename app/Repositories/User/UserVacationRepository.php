@@ -11,12 +11,8 @@ class UserVacationRepository
     {
         return Vacation::query()
             ->where('user_id', $user_id)
-            ->with('user')
-            ->when(!empty($filters['start_date']), function ($query) use ($filters) {
-                $query->where('start_date', '>=', $filters['start_date']);
-            })
-            ->when(!empty($filters['end_date']), function ($query) use ($filters) {
-                $query->where('end_date', '<=', $filters['end_date']);
+            ->when(!empty($filters['start_date']) && !empty($filters['left_date']), function ($query) use ($filters) {
+                $query->whereBetween('created_at', [$filters['start_date'], $filters['left_date']]);
             })
             ->when(!empty($filters['status']), function ($query) use ($filters) {
                 $query->where('status', $filters['status']);

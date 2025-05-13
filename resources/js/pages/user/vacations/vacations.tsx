@@ -46,7 +46,7 @@ export default function VacationsList({vacations}: VacationsPageProps) {
                     showStatus: true,
                     showVacationType: true
                 }}
-                route="/vacations"
+                route="/user/vacations"
             />
 
             <section className="md:flex md:items-start md:justify-center md:container md:mt-16 md:gap-x-4">

@@ -46,7 +46,7 @@ export default function SalariesList({salaries}: SalariesPageProps) {
                     showDateRange: true,
                     showStatus: true,
                 }}
-                route="/salaries"
+                route="/user/salaries"
             />
 
             <section className="md:flex md:items-start md:justify-center md:container md:mt-16 md:gap-x-4">
@@ -57,7 +57,7 @@ export default function SalariesList({salaries}: SalariesPageProps) {
                             <p className="text-[13px] md:text-[15px] mt-3 md:mt-6">تنخواه ثبت شده در این ماه</p>
                         </div>
 
-                        <div className="w-full grid grid-cols-3 items-center justify-center gap-x-4 mt-11">
+                        <div className="w-full grid grid-cols-2 items-center justify-center gap-x-4 mt-11">
                             <div className="flex flex-col items-center gap-y-2">
                                 <button type="button" className="bg-[#669fec] p-3.5 md:p-3 rounded-full"
                                         onClick={() => setFilterSalariesState(true)}>
@@ -77,14 +77,14 @@ export default function SalariesList({salaries}: SalariesPageProps) {
                                 <p className="text-[15px]">افزودن تنخواه</p>
                             </div>
 
-                            <div className="flex flex-col items-center gap-y-2">
-                                <button type="button" className="bg-[#669fec] p-3.5 md:p-3 rounded-full"
-                                        onClick={() => setCreateCarSalary(true)}>
-                                    <img src="/static/icons/light/light-car-icon.svg" alt="plus icon" className="w-8"/>
-                                </button>
+                            {/*<div className="flex flex-col items-center gap-y-2">*/}
+                            {/*    <button type="button" className="bg-[#669fec] p-3.5 md:p-3 rounded-full"*/}
+                            {/*            onClick={() => setCreateCarSalary(true)}>*/}
+                            {/*        <img src="/static/icons/light/light-car-icon.svg" alt="plus icon" className="w-8"/>*/}
+                            {/*    </button>*/}
 
-                                <p className="text-[15px]">خودرویی</p>
-                            </div>
+                            {/*    <p className="text-[15px]">خودرویی</p>*/}
+                            {/*</div>*/}
                         </div>
                     </div>
                 </section>

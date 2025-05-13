@@ -23,7 +23,9 @@ class ExportPdfClocksService extends Service
         protected ExportPdfClocksRepository $exportPdfClocksRepository,
         protected UsersManageService        $usersManageService,
         protected VacationReportDataAction  $vacationReportDataAction,
-    ){}
+    )
+    {
+    }
 
     public function exportClocksReport(int $userId, ?string $startDate = null, ?string $endDate = null): PdfBuilder
     {
@@ -33,10 +35,11 @@ class ExportPdfClocksService extends Service
             ->getClocksExportData($userId, $startDate, $endDate)
             ->groupBy(fn($item) => Carbon::parse($item->created_date)->format('Y-m-d'));
 
-        $report = $this->prepareReportData($clocks, $startDate, $endDate);
+        $clockReport = $this->prepareReportData($clocks, $startDate, $endDate);
         $projectReport = $this->projectWorklog($clocks);
         $vacationReport = $this->vacationReportDataAction->execute($userId, $startDate, $endDate);
-        return $this->generatePdf($user, $startDate, $endDate, $report, $projectReport, $vacationReport, $format);
+        $clocksSummery = $this->calculateTotalClocks($clocks);
+        return $this->generatePdf($user, $startDate, $endDate, $clockReport, $projectReport, $vacationReport, $clocksSummery, $format);
     }
 
     protected function prepareReportData(Collection $clocksByDate, string $startDate, string $endDate): array
@@ -88,6 +91,18 @@ class ExportPdfClocksService extends Service
         return $entry;
     }
 
+    protected function calculateTotalClocks(Collection $clocks): array
+    {
+        $totalMinutes = $clocks->flatten()->sum('time_value');
+        $totalHours = sprintf('%02d:%02d', floor($totalMinutes / 60), $totalMinutes % 60);
+        $totalWorkDays = (float) $totalHours / 8;
+
+        return [
+            'total_hours' => $totalHours,
+            'total_work_days' => $totalWorkDays,
+        ];
+    }
+
     protected function projectWorklog(Collection $clocks): array
     {
         $clockIds = $clocks->flatten()->pluck('id')->toArray();
@@ -116,10 +131,10 @@ class ExportPdfClocksService extends Service
         return $result;
     }
 
-    protected function generatePdf($user, string $start_date, string $end_date, array $reports, array $projects, array $vacations, string $format): PdfBuilder
+    protected function generatePdf($user, string $start_date, string $end_date, array $reports, array $projects, array $vacations, array $clocks_summary, string $format): PdfBuilder
     {
-        $pdf_name = ($start_date.$end_date.$user->name.Str::random(5) . '.pdf');
-        return pdf()->view('pdf.clock-report', compact('user', 'start_date', 'end_date', 'reports', 'projects', 'vacations', 'format'))
+        $pdf_name = ($start_date . '-' . $end_date . '-' . $user->name . '-' . Str::random(4) . '.pdf');
+        return pdf()->view('pdf.clock-report', compact('user', 'start_date', 'end_date', 'reports', 'projects', 'vacations', 'clocks_summary', 'format'))
             ->withBrowsershot(function (Browsershot $browsershot) {
                 $browsershot->noSandbox();
                 $browsershot->setChromePath("C:\Users\win 10\.cache\puppeteer\chrome\win64-132.0.6834.110\chrome-win64\chrome.exe");

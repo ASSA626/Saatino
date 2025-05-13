@@ -52,15 +52,15 @@ export default function Dashboard({currentClock, worklogs, remainingTime, projec
                 </section>
 
                 <section className="w-full flex flex-col gap-y-8 rounded-t-md px-3 max-md:py-4 max-md:mt-4 overflow-hidden">
-                    <Delay dailyDelay={"24 دقیقه"} monthlyDelay={"15 ساعت"}/>
-                    <DelayVacation/>
-                    {/*<div className="w-full md:h-[480px] border border-dashed border-zinc-300 flex flex-col items-center justify-center gap-y-4 max-md:p-4 rounded-2xl">*/}
-                    {/*    <img src="/static/images/Coming%20soon%20banner.png" alt="comming-soon-banner" className="md:w-1/2 w-full"/>*/}
-                    {/*    <div className="text-center">*/}
-                    {/*        <h1 className="text-xl md:text-3xl font-bold md:mb-4 mb-2">به زودی...</h1>*/}
-                    {/*        <p className="max-md:text-sm">این بخش از پنل کاربری هنوز درحال طراحی است.</p>*/}
-                    {/*    </div>*/}
-                    {/*</div>*/}
+                    {/*<Delay dailyDelay={"24 دقیقه"} monthlyDelay={"15 ساعت"}/>*/}
+                    {/*<DelayVacation/>*/}
+                    <div className="w-full md:h-[480px] border border-dashed border-zinc-300 flex flex-col items-center justify-center gap-y-4 max-md:p-4 rounded-2xl">
+                        <img src="/static/images/Coming%20soon%20banner.png" alt="comming-soon-banner" className="md:w-1/2 w-full"/>
+                        <div className="text-center">
+                            <h1 className="text-xl md:text-3xl font-bold md:mb-4 mb-2">به زودی...</h1>
+                            <p className="max-md:text-sm">این بخش از پنل کاربری هنوز درحال طراحی است.</p>
+                        </div>
+                    </div>
                 </section>
             </section>
         </UserLayout>

@@ -36,7 +36,7 @@ export default function ClockManagement({clocks, clocks_count, user, report}: Cl
         {key: 'start_clock', label: 'ساعت ورود', prefix: 'ساعت'},
         {key: 'left_clock', label: 'ساعت خروج', prefix: 'ساعت'},
         {key: 'time_value', label: 'مقدار کارکرد', formatTime: true},
-        {key: 'worklog_status', label: 'وضعیت کارکرد ها', render: (value: string) => (<StatusBadges status={value}/>)},
+        {key: 'worklog_status', label: 'وضعیت کارکرد ها', render: (value: string) => (<StatusBadges status={value} readOnly={true}/>)},
         {
             key: 'delete_action',
             label: 'حذف',

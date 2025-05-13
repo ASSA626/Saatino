@@ -132,23 +132,23 @@
         </div>
 
         <div class="w-full px-6 mb-3 flex items-center gap-4">
-{{--            <div class="mx-auto w-full">--}}
-{{--                <table class="border-collapse w-full text-[12px]">--}}
-{{--                    <thead>--}}
-{{--                    <tr class="text-center">--}}
-{{--                        <th class="font-normal border border-gray-200">جمع کل ساعات</th>--}}
-{{--                        <th class="font-normal border border-gray-200">جمع روز کاری</th>--}}
-{{--                    </tr>--}}
-{{--                    </thead>--}}
+            <div class="mx-auto w-full">
+                <table class="border-collapse w-full text-[12px]">
+                    <thead>
+                    <tr class="text-center">
+                        <th class="font-normal border border-gray-200">جمع کل ساعات</th>
+                        <th class="font-normal border border-gray-200">جمع روز کاری</th>
+                    </tr>
+                    </thead>
 
-{{--                    <tbody>--}}
-{{--                    <tr class="text-center">--}}
-{{--                        <td class="text-[12px] font-bold border border-gray-200">{{ $total_time }} ساعت</td>--}}
-{{--                        <td class="text-[12px] font-bold border border-gray-200">{{ $total_day }} روز</td>--}}
-{{--                    </tr>--}}
-{{--                    </tbody>--}}
-{{--                </table>--}}
-{{--            </div>--}}
+                    <tbody>
+                    <tr class="text-center">
+                        <td class="text-[12px] font-bold border border-gray-200">{{ $clocks_summary['total_hours'] }} ساعت</td>
+                        <td class="text-[12px] font-bold border border-gray-200">{{ $clocks_summary['total_work_days'] }} روز</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
 
             <div class="mx-auto w-full">
                 <table class="border-collapse w-full text-[12px]">

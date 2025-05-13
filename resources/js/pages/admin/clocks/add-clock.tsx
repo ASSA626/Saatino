@@ -1,4 +1,4 @@
-import {Input, InputClock} from "@/components/shared/input.components";
+import {Input, InputClock, InputDatePicker} from "@/components/shared/input.components";
 import {Button} from "@/components/ui/button";
 import DialogLayout from "@/layouts/dialog.layout";
 import {FormEvent, useState} from "react";
@@ -32,9 +32,17 @@ export default function AddClock({addClockState, setAddClockState}: AddClockProp
         {id: 3, title: "پروژه سوم"}
     ];
 
+    const clockStatuses = [
+        {title: "کارکرد وارد شده", status: "inserted"},
+        {title: "کارکرد وارد نشده", status: "uninstructed"},
+        {title: "در انتظار کارکرد ها", status: "inserting"},
+        {title: "کارکرد ناقص است", status: "uncompleted"},
+    ]
+
     const {data, setData, post, processing, errors, reset} = useForm({
         clock: {
             user_id: 1,
+            clock_status: '',
             start_clock: '',
             left_clock: '',
             time_value: 0,
@@ -119,12 +127,23 @@ export default function AddClock({addClockState, setAddClockState}: AddClockProp
                 </p>
 
                 <div className="flex flex-col items-center gap-y-3">
-                    <Input
-                        id="created_date"
-                        label="تاریخ ساعت"
-                        value={data.clock.created_date}
-                        onChange={(e) => handleClockChange('created_date', e.target.value)}
-                    />
+                    <div className="flex items-center gap-x-2 w-full pb-4 mt-2">
+                        <InputDatePicker
+                            id="created_date"
+                            label="تاریخ ساعت"
+                            value={data.clock.created_date}
+                            onChange={(formattedDate) => handleClockChange('created_date',formattedDate)}
+                        />
+
+                        <SelectBox
+                            title="وضعیت ساعت"
+                            options={clockStatuses}
+                            value={data.clock.clock_status}
+                            onChange={(value) => handleClockChange('clock_status', value)}
+                            labelKey="title"
+                            valueKey="status"
+                        />
+                    </div>
 
                     <div className="flex items-center gap-x-2 w-full pb-4 mt-2">
                         <InputClock
@@ -145,7 +164,7 @@ export default function AddClock({addClockState, setAddClockState}: AddClockProp
                     <div className="flex flex-col gap-x-2 w-full border-t border-dashed border-gray-400 pt-6">
                         <div className="flex items-center gap-x-2 w-full">
                             <SelectBox
-                                title="پروژه"
+                                title="انتخاب پروژه"
                                 options={projects}
                                 value={currentWorklog.project_id.toString()}
                                 onChange={handleProjectChange}

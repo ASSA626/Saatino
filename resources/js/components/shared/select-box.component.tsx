@@ -14,12 +14,27 @@ type SelectBoxProps = {
 };
 
 const SelectBox = ({title, options, value, onChange, labelKey, valueKey}: SelectBoxProps) => {
+    // یافتن آیتم انتخاب شده
+    const selectedOption = options.find(
+        (option) => (option[valueKey] ?? option.id)?.toString() === value?.toString()
+    );
+
     return (
-        <Select onValueChange={onChange} value={value?.toString()}>
+        <Select
+            onValueChange={onChange}
+            value={value?.toString()}
+        >
             <SelectTrigger
                 className="w-full p-[10px] border border-gray-400 rounded-md outline-none text-[#000] text-md"
             >
-                <SelectValue placeholder={title}/>
+                <SelectValue
+                    placeholder={title}
+                >
+                    {selectedOption
+                        ? (selectedOption[labelKey] ?? 'بدون نام')
+                        : title
+                    }
+                </SelectValue>
             </SelectTrigger>
             <SelectContent>
                 {options.map((option) => (
